@@ -1,0 +1,19 @@
+{
+  "name": "basicbot",
+  "version": "1.0.0",
+  "description": "basic template for ts battleship challenges",
+  "main": "router.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc -p . && node router.js"
+  },
+  "author": "tal",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^8.0.14",
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "tsc": "^1.20150623.0",
+    "typescript": "^2.4.1"
+  }
+}
