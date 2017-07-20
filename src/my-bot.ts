@@ -14,6 +14,7 @@ export class MyBot {
         if(previousShot) {
             return this.getNextTarget(previousShot.Position);
         }
+        console.log(gamestate);
         return { Row: "A", Column: 1 };  
     }
 
