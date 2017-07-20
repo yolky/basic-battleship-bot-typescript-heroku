@@ -50,6 +50,9 @@ export class MyBot {
     }
 
     private static containsObject(list:Array<object>, object:Object):boolean{
+        if(!list){
+            return false;
+        }
         for(var i=0; i<list.length; i++){
             if(list[i]==object){
                 return true;
