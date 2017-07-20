@@ -1,4 +1,6 @@
 export class MyBot {
+    static letters:string = 'ABCDEFGHIJ';
+
     public getShipPositions() {
         return [
             { StartingSquare: { Row: "A", Column: 1 }, EndingSquare : { Row: "A", Column: 5 } },
@@ -10,14 +12,15 @@ export class MyBot {
     }
 
     public selectTarget(gamestate) {
-        var previousShot = gamestate.MyShots && gamestate.MyShots[gamestate.MyShots.length-1];
-        if(previousShot) {
-            console.log(gamestate);
-            return this.getNextTarget(previousShot.Position);
+        return this.getRandomTarget(gamestate);
+        // var previousShot = gamestate.MyShots && gamestate.MyShots[gamestate.MyShots.length-1];
+        // if(previousShot) {
+        //     console.log(gamestate);
+        //     return this.getNextTarget(previousShot.Position);
             
-        }
+        // }
         
-        return { Row: "A", Column: 1 };  
+        // return { Row: "A", Column: 1 };  
     }
 
     private getNextTarget(position) {
@@ -34,8 +37,33 @@ export class MyBot {
         return String.fromCharCode(newRow);
     }
 
+    private getRandomTarget(gamestate){
+        let prevMoves: Array<any> = Object.keys(gamestate.MyShots)['Position'];
+        let randPosition: {Row:string, Column:number};
+        do{
+            let randomRow: string = MyBot.letters[MyBot.randIntBetween(0,9)];
+            let randomCol: number = MyBot.randIntBetween(0,9);
+            randPosition = {Row: randomRow, Column: randomCol};
+        }while(MyBot.containsObject(prevMoves, randPosition))
+
+        return randPosition;
+    }
+
+    private static containsObject(list:Array<object>, object:Object):boolean{
+        for(var i=0; i<list.length; i++){
+            if(list[i]==object){
+                return true;
+            }
+        }
+        return false;
+    }
+
     private getNextColumn(column) {
         return column % 10 + 1;
+    }
+
+    private static randIntBetween(low:number, high:number):number{
+        return (Math.floor(Math.random()*(high-low+1)))+low;
     }
 }
 
