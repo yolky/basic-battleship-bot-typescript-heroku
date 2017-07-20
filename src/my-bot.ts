@@ -14,15 +14,16 @@ export class MyBot {
     }
 
     public selectTarget(gamestate) {
-        return this.getRandomTarget(gamestate);
-        // var previousShot = gamestate.MyShots && gamestate.MyShots[gamestate.MyShots.length-1];
-        // if(previousShot) {
-        //     console.log(gamestate);
-        //     return this.getNextTarget(previousShot.Position);
+        //return this.getRandomTarget(gamestate);
+        console.log(JSON.stringify(gamestate));
+        var previousShot = gamestate.MyShots && gamestate.MyShots[gamestate.MyShots.length-1];
+        if(previousShot) {
+            console.log(gamestate);
+            return this.getNextTarget(previousShot.Position);
             
-        // }
+        }
         
-        // return { Row: "A", Column: 1 };  
+        return { Row: "A", Column: 1 };  
     }
 
     private getNextTarget(position) {
