@@ -1,3 +1,5 @@
+import {Position} from './position';
+
 export class MyBot {
     static letters:string = 'ABCDEFGHIJ';
 
@@ -39,11 +41,9 @@ export class MyBot {
 
     private getRandomTarget(gamestate){
         let prevMoves: Array<any> = Object.keys(gamestate.MyShots)['Position'];
-        let randPosition: {Row:string, Column:number};
+        let randPosition: Position;
         do{
-            let randomRow: string = MyBot.letters[MyBot.randIntBetween(0,9)];
-            let randomCol: number = MyBot.randIntBetween(1,10);
-            randPosition = {Row: randomRow, Column: randomCol};
+            let randPosition: Position = new Position(MyBot.randIntBetween(0,9),MyBot.randIntBetween(0,9));
         }while(MyBot.containsObject(prevMoves, randPosition))
 
         return randPosition;
