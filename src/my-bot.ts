@@ -12,9 +12,11 @@ export class MyBot {
     public selectTarget(gamestate) {
         var previousShot = gamestate.MyShots && gamestate.MyShots[gamestate.MyShots.length-1];
         if(previousShot) {
+            console.log(gamestate);
             return this.getNextTarget(previousShot.Position);
+            
         }
-        console.log(gamestate);
+        
         return { Row: "A", Column: 1 };  
     }
 

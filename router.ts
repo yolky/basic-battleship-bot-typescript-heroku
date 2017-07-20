@@ -19,6 +19,7 @@ export class Router {
 
         app.post('/SelectTarget', (req, res) => {
             let target = myBot.selectTarget(req.body);
+            console.log(target);
             res.send(target);
         });
 
