@@ -41,8 +41,8 @@ export class MyBot {
         let prevMoves: Array<any> = Object.keys(gamestate.MyShots)['Position'];
         let randPosition: {Row:string, Column:number};
         do{
-            let randomRow: string = MyBot.letters[MyBot.randIntBetween(1,10)];
-            let randomCol: number = MyBot.randIntBetween(0,9);
+            let randomRow: string = MyBot.letters[MyBot.randIntBetween(0,9)];
+            let randomCol: number = MyBot.randIntBetween(1,10);
             randPosition = {Row: randomRow, Column: randomCol};
         }while(MyBot.containsObject(prevMoves, randPosition))
 
