@@ -6,6 +6,8 @@ import {Position} from './position'
 export class ConfigurationGenerator{
     public boardCounter: Array<Array<number>>;
 
+    public lastNum=0;
+
     public constructor(){
         this.boardCounter = [];
         for(var i=0;i <Globals.BOARD_ROWS; i++){
@@ -54,6 +56,7 @@ export class ConfigurationGenerator{
 
             this.generateConfiguration(lengths, shots, hitShots);
         }
+        this.lastNum = num;
     }
 
     public getMaxPosition():Position{
@@ -62,7 +65,7 @@ export class ConfigurationGenerator{
         let currentCol:number = 0;
         for(var i=0;i <Globals.BOARD_ROWS; i++){
             for(var j = 0; j<Globals.BOARD_COLS; j++){
-                if(this.boardCounter[i][j]>currentMax){
+                if(this.boardCounter[i][j]>currentMax && this.boardCounter[i][j] != this.lastNum){
                     currentMax = this.boardCounter[i][j];
                     currentRow = i;
                     currentCol = j;
