@@ -14,7 +14,7 @@ export class MyBot {
         //     { StartingSquare: { Row: "G", Column: 1 }, EndingSquare : { Row: "G", Column: 3 } },
         //     { StartingSquare: { Row: "I", Column: 1 }, EndingSquare : { Row: "I", Column: 2 } },
         // ]
-        return BoardState.getRandomSet([5,4,3,3,2]);
+        return BoardState.getRandomStartingConfiguration([5,4,3,3,2]);
     }
 
     public selectTarget(gamestate) {

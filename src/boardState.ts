@@ -71,4 +71,9 @@ export class BoardState{
     public static getRandomBoardArray(lengths: Array<number>, shots: Array<Shot>):Array<Array<boolean>>{
         return BoardState.getRandomSet(lengths,shots).getBoardArray();
     }
+
+    public static getRandomStartingConfiguration(lengths: Array<number>):Array<ShipPlacement>{
+        return BoardState.getRandomSet(lengths).ships;
+    }
+    
 }
