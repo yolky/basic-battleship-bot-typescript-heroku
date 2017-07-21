@@ -19,8 +19,6 @@ export class Router {
         app.use(bodyParser.urlencoded({ extended: false }));
         app.use(bodyParser.json());
 
-        console.log('hasdf');
-
         app.get('/GetShipPositions', (req, res) => {
             console.log(req.url);
             let positions = myBot.getShipPositions();
