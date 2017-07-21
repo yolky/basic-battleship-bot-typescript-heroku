@@ -1,14 +1,19 @@
 export class Position{
-    public Row: string;
-    public Column: number;
+    public rowChar: string;
+    public row: number;
+    public col: number;
 
     public constructor(r:number, c:number){
-        this.Row = this.toLetter(r);
-        this.Column = c+1;
+        this.rowChar = this.toLetter(r);
+        this.row = r;
+        this.col = c;
     }
 
     private toLetter(n:number):string   {
         return 'ABCEDFEGHIJ'[n];
     }
-    
+
+    private toJSON(){
+        return {Row:this.rowChar, Column: this.col+1};
+    }
 }

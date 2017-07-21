@@ -1,29 +1,35 @@
 import {Position} from './position';
+import {randBetween} from './random';
+import {BoardState} from './BoardState';
+import {ConfigurationGenerator} from './configurationGenerator';
 
 export class MyBot {
     static letters:string = 'ABCDEFGHIJ';
-
+    
     public getShipPositions() {
-        return [
-            { StartingSquare: { Row: "A", Column: 1 }, EndingSquare : { Row: "A", Column: 5 } },
-            { StartingSquare: { Row: "C", Column: 1 }, EndingSquare : { Row: "C", Column: 4 } },
-            { StartingSquare: { Row: "E", Column: 1 }, EndingSquare : { Row: "E", Column: 3 } },
-            { StartingSquare: { Row: "G", Column: 1 }, EndingSquare : { Row: "G", Column: 3 } },
-            { StartingSquare: { Row: "I", Column: 1 }, EndingSquare : { Row: "I", Column: 2 } },
-        ]
+        // return [
+        //     { StartingSquare: { Row: "A", Column: 1 }, EndingSquare : { Row: "A", Column: 5 } },
+        //     { StartingSquare: { Row: "C", Column: 1 }, EndingSquare : { Row: "C", Column: 4 } },
+        //     { StartingSquare: { Row: "E", Column: 1 }, EndingSquare : { Row: "E", Column: 3 } },
+        //     { StartingSquare: { Row: "G", Column: 1 }, EndingSquare : { Row: "G", Column: 3 } },
+        //     { StartingSquare: { Row: "I", Column: 1 }, EndingSquare : { Row: "I", Column: 2 } },
+        // ]
+        return BoardState.getRandomSet([5,4,3,3,2]);
     }
 
     public selectTarget(gamestate) {
+        let generator = new ConfigurationGenerator();
+        generator.generateConfigurations(100,[5,4,3,3,2], gamestate.MyShots);
+        return generator.getMaxPosition();
         //return this.getRandomTarget(gamestate);
-        console.log(JSON.stringify(gamestate));
-        var previousShot = gamestate.MyShots && gamestate.MyShots[gamestate.MyShots.length-1];
-        if(previousShot) {
-            console.log(gamestate);
-            return this.getNextTarget(previousShot.Position);
+        // var previousShot = gamestate.MyShots && gamestate.MyShots[gamestate.MyShots.length-1];
+        // if(previousShot) {
+        //     console.log(gamestate);
+        //     return this.getNextTarget(previousShot.Position);
             
-        }
+        // }
         
-        return { Row: "A", Column: 1 };  
+        // return { Row: "A", Column: 1 };  
     }
 
     private getNextTarget(position) {
@@ -41,11 +47,12 @@ export class MyBot {
     }
 
     private getRandomTarget(gamestate){
-        let prevMoves: Array<any> = Object.keys(gamestate.MyShots)['Position'];
+        let prevMoves: Array<any> = gamestate.MyShots.map((x) => {return x.Position});
         let randPosition: Position;
         do{
-            let randPosition: Position = new Position(MyBot.randIntBetween(0,9),MyBot.randIntBetween(0,9));
+            randPosition = new Position(randBetween(0,9),randBetween(0,9));
         }while(MyBot.containsObject(prevMoves, randPosition))
+
 
         return randPosition;
     }
@@ -64,10 +71,6 @@ export class MyBot {
 
     private getNextColumn(column) {
         return column % 10 + 1;
-    }
-
-    private static randIntBetween(low:number, high:number):number{
-        return (Math.floor(Math.random()*(high-low+1)))+low;
     }
 }
 
