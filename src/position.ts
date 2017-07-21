@@ -16,4 +16,10 @@ export class Position{
     private toJSON(){
         return {Row:this.rowChar, Column: this.col+1};
     }
+
+    public static letterFormatToPosition(char: string, _col: number){
+        return new Position(char.charCodeAt(0) - 65, _col-1);
+    }
+
+
 }

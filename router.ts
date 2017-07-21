@@ -52,6 +52,20 @@ export class Router {
         // testGen.generateConfigurations(10000,[5,4,3,3,2],shots);
         // console.log(testGen.boardCounter);
 
+        console.log(JSON.stringify({ GameCount: 2,
+ShipPositions: 
+[{ StartingSquare: { Row: "A", Column: 1 }, EndingSquare : { Row: "A", Column: 5 } },
+{ StartingSquare: { Row: "C", Column: 1 }, EndingSquare : { Row: "C", Column: 4 } },
+{ StartingSquare: { Row: "E", Column: 1 }, EndingSquare : { Row: "E", Column: 3 } },
+{ StartingSquare: { Row: "G", Column: 1 }, EndingSquare : { Row: "G", Column: 3 } },
+{ StartingSquare: { Row: "I", Column: 1 }, EndingSquare : { Row: "I", Column: 2 } },],
+MyShots: 
+[ { Position:{Row: "C", Column: 4}, WasHit: false }],
+OpponentsShots: 
+[ { Position: {Row: "A", Column: 1}, WasHit: null },
+{ Position: {Row: "A", Column: 2}, WasHit: null },
+{ Position: {Row: "A", Column: 3}, WasHit: null } ] }));
+
 
     }
 }

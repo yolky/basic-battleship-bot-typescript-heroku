@@ -2,6 +2,7 @@ import {Position} from './position';
 import {randBetween} from './random';
 import {BoardState} from './boardState';
 import {ConfigurationGenerator} from './configurationGenerator';
+import {Shot} from './shot';
 
 export class MyBot {
     static letters:string = 'ABCDEFGHIJ';
@@ -19,7 +20,10 @@ export class MyBot {
 
     public selectTarget(gamestate) {
         let generator = new ConfigurationGenerator();
-        generator.generateConfigurations(100,[5,4,3,3,2], gamestate.MyShots);
+        let shotList: Array<Shot> = gamestate.MyShots.map((x)=> {
+            return {Position: Position.letterFormatToPosition(x.Position.Row, x.Position.Column), WasHit: x.WasHit};
+        });
+        generator.generateConfigurations(100,[5,4,3,3,2], shotList);
         return generator.getMaxPosition();
         //return this.getRandomTarget(gamestate);
         // var previousShot = gamestate.MyShots && gamestate.MyShots[gamestate.MyShots.length-1];

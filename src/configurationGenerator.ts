@@ -23,10 +23,14 @@ export class ConfigurationGenerator{
             boardToAdd = BoardState.getRandomBoardArray(lengths, shots);
             compatible = true;
             for(var i =0; i<hitShots.length; i++){
+                //console.log(lengths);
+                //console.log(hitShots[i].Position.row + ','+hitShots[i].Position.col);
                 if(!boardToAdd[hitShots[i].Position.row][hitShots[i].Position.col]){
                     compatible = false;
+                    break;
                 }
             }
+
         }
         
         for(var i=0;i <Globals.BOARD_ROWS; i++){
@@ -40,12 +44,14 @@ export class ConfigurationGenerator{
 
     public generateConfigurations(num:number, lengths:Array<number>, shots: Array<Shot> = []){
         let hitShots: Array<Shot> = [];
+        console.log(shots[0]);
         for(var i=0; i<shots.length; i++){
             if(shots[i].WasHit){
                 hitShots.push(shots[i]);
             }
         }
         for(var i=0;i<num;i++){
+
             this.generateConfiguration(lengths, shots, hitShots);
         }
     }

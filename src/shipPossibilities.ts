@@ -47,7 +47,9 @@ export class ShipPossibilities{
 
     public removeFromShots(shots: Array<Shot>){
         for(var i=0; i<shots.length; i++){
-            this.removeSquare(shots[i].Position);
+            if(!shots[i].WasHit){
+                this.removeSquare(shots[i].Position);
+            }
         }
     }
 
