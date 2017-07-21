@@ -39,8 +39,14 @@ export class ConfigurationGenerator{
     }
 
     public generateConfigurations(num:number, lengths:Array<number>, shots: Array<Shot> = []){
+        let hitShots: Array<Shot> = [];
+        for(var i=0; i<shots.length; i++){
+            if(shots[i].WasHit){
+                hitShots.push(shots[i]);
+            }
+        }
         for(var i=0;i<num;i++){
-            this.generateConfiguration(lengths, shots);
+            this.generateConfiguration(lengths, shots, hitShots);
         }
     }
 
