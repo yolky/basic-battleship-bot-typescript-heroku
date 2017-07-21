@@ -13,10 +13,11 @@ export class ShipPlacement{
     }
 
     public toJSON(){
-        let end:Position = new Position(this.orientation==Direction.Vertical?
-        this.position.row+this.length-1:this.position.row,
-        this.orientation==Direction.Horizontal?
-        this.position.col+this.length-1:this.position.col);
+        console.log(this.position);
+        let endRow: number = this.orientation==Direction.Vertical?this.position.row+this.length-1:this.position.row;
+        let endCol: number = this.orientation==Direction.Horizontal?this.position.col+this.length-1:this.position.col;
+        let end:Position = new Position(endRow, endCol);
+        console.log(end);
         return {StartingSquare: this.position, EndingSquare: end};
     }
     

@@ -10,7 +10,7 @@ export class Position{
     }
 
     private toLetter(n:number):string   {
-        return 'ABCEDFEGHIJ'[n];
+        return 'ABCDFEGHIJ'[n];
     }
 
     private toJSON(){
