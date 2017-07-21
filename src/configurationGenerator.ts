@@ -16,8 +16,19 @@ export class ConfigurationGenerator{
         }        
     }
 
-    public generateConfiguration(lengths:Array<number>, shots: Array<Shot> = []):void{
-        let boardToAdd: Array<Array<boolean>> = BoardState.getRandomBoardArray(lengths, shots);
+    public generateConfiguration(lengths:Array<number>, shots: Array<Shot> = [], hitShots:Array<Shot> = []):void{
+        let compatible: boolean = false;
+        let boardToAdd: Array<Array<boolean>>;
+        while(!compatible){
+            boardToAdd = BoardState.getRandomBoardArray(lengths, shots);
+            compatible = true;
+            for(var i =0; i<hitShots.length; i++){
+                if(!boardToAdd[hitShots[i].Position.row][hitShots[i].Position.col]){
+                    compatible = false;
+                }
+            }
+        }
+        
         for(var i=0;i <Globals.BOARD_ROWS; i++){
             for(var j = 0; j<Globals.BOARD_COLS; j++){
                 if(boardToAdd[i][j]){
