@@ -32,7 +32,6 @@ export class ConfigurationGenerator{
                     break;
                 }
             }
-
         }
         
         for(var i=0;i <Globals.BOARD_ROWS; i++){

@@ -3,6 +3,7 @@ import {ShipPossibilities} from './shipPossibilities';
 import * as Globals from './constants';
 import {Position} from './position';
 import {Shot} from './shot';
+import {randBetween} from './random'
 
 export class BoardState{
     public ships: Array<ShipPlacement> = [];
@@ -13,24 +14,58 @@ export class BoardState{
         this.shots = shots;
     }
 
-    static getRandomSet(lengths: Array<number>, shots:Array<Shot> = []):BoardState
+    static getRandomSet(lengths: Array<number>, shots:Array<Shot> = [], hitShots: Array<Shot> = []):BoardState
     {
         let possibleShips: Array<ShipPlacement> = [];
-        for(var i=0; i<lengths.length; i++){
-            possibleShips.push(BoardState.placeNextShip(lengths,possibleShips,shots,i));
+        let validShipPositions: Array<ShipPossibilities> = [];
+
+        let hitShotsWithResolved: {[Position: string]: {shot:Shot, resolved: boolean});
+
+        for(var i=0; i<hitShots.length; i++){
+            hitShotsWithResolved[JSON.stringify(hitShots[i].Position)] = {shot: hitShots[i], resolved: false};
         }
+        let allResolved: boolean= true;
+        if(hitShots.length > 0){
+            allResolved = false;
+        }
+
+        //perhaps get valid placements beforehand, and choose one with minimum number of valid placements
+
+        while(!allResolved){
+            //use placeRandomShipFromShot to get next ship
+            //remove the resolved shots
+            //update the valid positions for all the ships
+            //update the allResolved boolean (NOR the list's resolved property)
+
+            //if at any point validPlacements  == 0,
+        }
+
+        //for whatever ships have yet to be placed (needs to be checked)
+        //place those ships randomly
+
+        // for(var i=0; i<lengths.length; i++){
+        //     validShipPositions.push(new ShipPossibilities(lengths[i]));
+        //     //possibleShips.push(BoardState.placeNextShip(lengths,possibleShips,shots,i));
+        // }
         return new BoardState(possibleShips);
+
+        //pick first shot
+        //choose
     }
 
-    
-    static placeNextShip(lengths: Array<number>, alreadyPlaced: Array<ShipPlacement>, shots: Array<Shot>, indexToPlace: number):ShipPlacement{
-        let nextShip = new ShipPossibilities(lengths[indexToPlace]);
-        for(var i =0; i< alreadyPlaced.length; i++){
-            nextShip.removePossibilities(alreadyPlaced[i]);
-        }
-        nextShip.removeFromShots(shots);
+    static placeRandomShipFromShot(hitShot: Shot, validShipPositions: Array<ShipPossibilities>):ShipPlacement{
+        if(hitShot.WasHit){
+            let validPlacements: Array<ShipPlacement> = [];
+            for(var i=0; i<validShipPositions.length; i++){
+                validPlacements.concat(validShipPositions[i].getValidShotImpliedPlacements(hitShot));
+            }
+            return validPlacements[randBetween(0,validPlacements.length-1)];
+            //pick a random one
 
-        return nextShip.pickRandomPlacement();
+        }
+        else{
+            throw new Error("should be hit only...");
+        }
     }
 
     public drawShips(){
