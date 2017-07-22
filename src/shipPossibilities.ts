@@ -10,19 +10,23 @@ export class ShipPossibilities{
     private length: number;
     private numberOfPossibilities:number;
     private possibilities: ConfigurationSet;
-    private static initialPosAndNum: {length: number,posAndNum: {configs: ConfigurationSet, size: number}};
+    private static initialPosAndNum: {[length: number]: {configs: ConfigurationSet, size: number}} = {};
 
     public constructor(length:number){
         this.length = length;
         let returnValue: {configs: ConfigurationSet, size:number}
-        if(this.length in ShipPossibilities.initialPosAndNum){
-            returnValue = ShipPossibilities.initialPosAndNum[this.length];
+        if(!ShipPossibilities.initialPosAndNum[this.length]){
+            ShipPossibilities.initialPosAndNum[this.length] = ShipPossibilities.generateAllPossibilities(this.length); 
         }
         else{
-            returnValue = ShipPossibilities.generateAllPossibilities(this.length);
+            console.log(ShipPossibilities.initialPosAndNum);
         }
+        returnValue = ShipPossibilities.initialPosAndNum[this.length];
+        
         this.numberOfPossibilities = returnValue.size;
-        this.possibilities = returnValue.configs;
+        //deep cloning
+        this.possibilities = JSON.parse(JSON.stringify(returnValue.configs));
+        
     }
 
     public removePossibilities(shipConfiguration: ShipPlacement){
@@ -162,6 +166,7 @@ export class ShipPossibilities{
         let rowIndex: number = -1;
         do{
             rowIndex++;
+            console.log(currentIndex, randIndex, this.numberOfPossibilities ,this.possibilities[rowIndex].numInRow);
             currentIndex += this.possibilities[rowIndex].numInRow;
         }while(currentIndex<randIndex);
         let indexInRow: number = (this.possibilities[rowIndex].numInRow-1)+randIndex - currentIndex;
