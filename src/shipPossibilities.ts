@@ -1,6 +1,6 @@
 import {Position} from './position';
 import {Direction} from './direction';
-import {ShipPlacement} from './shipConfiguration'
+import {ShipPlacement} from './shipPlacement'
 import * as Globals from './constants';
 import {randBetween} from './random';
 import {Shot} from './shot'
@@ -154,7 +154,7 @@ export class ShipPossibilities{
         return {configs: currentPossibilities,size: count};
     }
 
-    public pickRandomConfiguration(){
+    public pickRandomPlacement(){
         //get random number up to possibility count
         //choose that one from the list
         //generate the thing

@@ -1,4 +1,4 @@
-import {ShipPlacement} from './shipConfiguration';
+import {ShipPlacement} from './shipPlacement';
 import {ShipPossibilities} from './shipPossibilities';
 import * as Globals from './constants';
 import {Position} from './position';
@@ -15,19 +15,22 @@ export class BoardState{
 
     static getRandomSet(lengths: Array<number>, shots:Array<Shot> = []):BoardState
     {
-        let placements:Array<ShipPlacement> = [];
-        let possibleShipPositions: Array<ShipPossibilities> = [];
-        for(var i=0; i< lengths.length; i++){
-            possibleShipPositions.push(new ShipPossibilities(lengths[i]));
-            possibleShipPositions[i].removeFromShots(shots);
+        let possibleShips: Array<ShipPlacement> = [];
+        for(var i=0; i<lengths.length; i++){
+            possibleShips.push(BoardState.placeNextShip(lengths,possibleShips,shots,i));
         }
-        for(var i=0; i< lengths.length; i++){
-            for(var j=0; j<placements.length; j++){
-                possibleShipPositions[i].removePossibilities(placements[j]);
-            }
-            placements.push(possibleShipPositions[i].pickRandomConfiguration());
+        return new BoardState(possibleShips);
+    }
+
+    
+    static placeNextShip(lengths: Array<number>, alreadyPlaced: Array<ShipPlacement>, shots: Array<Shot>, indexToPlace: number):ShipPlacement{
+        let nextShip = new ShipPossibilities(lengths[indexToPlace]);
+        for(var i =0; i< alreadyPlaced.length; i++){
+            nextShip.removePossibilities(alreadyPlaced[i]);
         }
-        return new BoardState(placements)
+        nextShip.removeFromShots(shots);
+
+        return nextShip.pickRandomPlacement();
     }
 
     public drawShips(){
