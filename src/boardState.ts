@@ -4,6 +4,7 @@ import * as Globals from './constants';
 import {Position} from './position';
 import {Shot} from './shot';
 import {randBetween} from './random'
+import {ShotImpliedPlacements} from './shotImpliedPlacements'
 
 export class BoardState{
     public ships: Array<ShipPlacement> = [];
@@ -14,16 +15,27 @@ export class BoardState{
         this.shots = shots;
     }
 
-    static getRandomSet(lengths: Array<number>, shots:Array<Shot> = [], hitShots: Array<Shot> = []):BoardState
+    static getRandomSet(shipLengths: Array<number>, shots:Array<Shot> = [], hitShots: Array<Shot> = []):BoardState
     {
         let possibleShips: Array<ShipPlacement> = [];
         let validShipPositions: Array<ShipPossibilities> = [];
 
-        let hitShotsWithResolved: {[Position: string]: {shot:Shot, resolved: boolean});
+        let shotImpliedPlacementsList: Array<ShotImpliedPlacements> = [];
+
+        for(var i=0; i<shipLengths.length; i++){
+            validShipPositions.push(new ShipPossibilities(shipLengths[i]));
+            validShipPositions[i].removeFromShots(shots);
+        }
 
         for(var i=0; i<hitShots.length; i++){
-            hitShotsWithResolved[JSON.stringify(hitShots[i].Position)] = {shot: hitShots[i], resolved: false};
+            shotImpliedPlacementsList.push(new ShotImpliedPlacements(hitShots[i]));
+            shotImpliedPlacementsList[i].removeInvalidPositions(validShipPositions);
         }
+
+        shotImpliedPlacementsList.sort((a,b,)=>{return a.allValidPlacements.length - b.allValidPlacements.length});
+
+        //sort by #
+
         let allResolved: boolean= true;
         if(hitShots.length > 0){
             allResolved = false;

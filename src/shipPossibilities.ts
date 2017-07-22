@@ -5,13 +5,14 @@ import * as Globals from './constants';
 import {randBetween} from './random';
 import {Shot} from './shot'
 import {BoardState} from './boardState';
+import {ShotImpliedPlacements} from './shotImpliedPlacements'
 
 export class ShipPossibilities{
-    private length: number;
+    public length: number;
     private numberOfPossibilities:number;
-    private possibilities: ConfigurationSet;
+    public possibilities: ConfigurationSet;
     private static initialPosAndNum: {[length: number]: {configs: ConfigurationSet, size: number}} = {};
-    private static initialShotImpliedPlacements: {[length: number]:Array<Array<Array<ShipPlacement>>>} = {};
+
 
 
     public constructor(length:number){
@@ -19,7 +20,7 @@ export class ShipPossibilities{
         let returnValue: {configs: ConfigurationSet, size:number}
         if(!ShipPossibilities.initialPosAndNum[this.length]){
             ShipPossibilities.initialPosAndNum[this.length] = ShipPossibilities.generateAllPossibilities(this.length); 
-            ShipPossibilities.generateShotImpliedPlacements(this.length);
+            ShotImpliedPlacements.generateShotImpliedPlacements(this.length);
         }
 
         returnValue = ShipPossibilities.initialPosAndNum[this.length];
@@ -186,37 +187,6 @@ export class ShipPossibilities{
             }
         }
         //then rowIndex is good
-    }
-
-    private static generateShotImpliedPlacements(length: number){
-        ShipPossibilities.initialShotImpliedPlacements[length] = [];
-        for(var i=0; i<Globals.BOARD_ROWS; i++){
-            ShipPossibilities.initialShotImpliedPlacements[length].push([]);
-            for(var j=0; j<Globals.BOARD_COLS; j++){
-                ShipPossibilities.initialShotImpliedPlacements[length][i].push([]);
-                let minRow: number = Math.max(0,i-(length-1));
-                for(var g = minRow; g<i; g++){
-                    ShipPossibilities[length][i][j].initialShotImpliedPlacements(new ShipPlacement(Direction.Vertical, length, new Position(g,j)));
-                }
-                let minCol: number = Math.max(0,j-(length-1));
-                for(var g = minCol; g<j; g++){
-                    ShipPossibilities[length][i][j].initialShotImpliedPlacements(new ShipPlacement(Direction.Horizontal, length, new Position(j,g)));
-                }
-            }
-        }
-    }
-
-    public getValidShotImpliedPlacements(shot: Shot):Array<ShipPlacement>{
-        let validPlacements: Array<ShipPlacement> = [];
-        let initialValidPlacements: Array<ShipPlacement> = ShipPossibilities.initialShotImpliedPlacements[this.length][shot.Position.row][shot.Position.col];
-        for(var i =0; i<initialValidPlacements.length; i++){
-            let selectedPossibilitySet: {horizontal: boolean, vertical:boolean} = this.possibilities[initialValidPlacements[i].position.row][initialValidPlacements[i].position.col];
-            if((selectedPossibilitySet.horizontal && initialValidPlacements[i].orientation == Direction.Horizontal)
-            || (selectedPossibilitySet.vertical && initialValidPlacements[i].orientation == Direction.Vertical)){
-                validPlacements.push(initialValidPlacements[i]);
-            }
-        }
-        return validPlacements;
     }
 }
 
