@@ -18,9 +18,7 @@ export class ShipPossibilities{
         if(!ShipPossibilities.initialPosAndNum[this.length]){
             ShipPossibilities.initialPosAndNum[this.length] = ShipPossibilities.generateAllPossibilities(this.length); 
         }
-        else{
-            console.log(ShipPossibilities.initialPosAndNum);
-        }
+
         returnValue = ShipPossibilities.initialPosAndNum[this.length];
         
         this.numberOfPossibilities = returnValue.size;
@@ -166,7 +164,6 @@ export class ShipPossibilities{
         let rowIndex: number = -1;
         do{
             rowIndex++;
-            console.log(currentIndex, randIndex, this.numberOfPossibilities ,this.possibilities[rowIndex].numInRow);
             currentIndex += this.possibilities[rowIndex].numInRow;
         }while(currentIndex<randIndex);
         let indexInRow: number = (this.possibilities[rowIndex].numInRow-1)+randIndex - currentIndex;
