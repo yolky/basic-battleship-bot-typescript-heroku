@@ -10,15 +10,22 @@ export class ShipPossibilities{
     private length: number;
     private numberOfPossibilities:number;
     private possibilities: ConfigurationSet;
+    private static initialPosAndNum: {length: number,posAndNum: {configs: ConfigurationSet, size: number}};
 
     public constructor(length:number){
         this.length = length;
-        let returnValue: {configs: ConfigurationSet, size:number} = ShipPossibilities.generateAllPossibilities(this.length);
+        let returnValue: {configs: ConfigurationSet, size:number}
+        if(this.length in ShipPossibilities.initialPosAndNum){
+            returnValue = ShipPossibilities.initialPosAndNum[this.length];
+        }
+        else{
+            returnValue = ShipPossibilities.generateAllPossibilities(this.length);
+        }
         this.numberOfPossibilities = returnValue.size;
         this.possibilities = returnValue.configs;
     }
 
-    public removePosibilities(shipConfiguration: ShipPlacement){
+    public removePossibilities(shipConfiguration: ShipPlacement){
         let lengthRow:number = shipConfiguration.orientation == Direction.Vertical? shipConfiguration.length: 1;
         let lengthCol:number = shipConfiguration.orientation == Direction.Horizontal? shipConfiguration.length: 1;
 
@@ -40,7 +47,7 @@ export class ShipPossibilities{
 
     public removeFromState(boardState: BoardState){
         for(var i=0; i<boardState.ships.length; i++){
-            this.removePosibilities(boardState.ships[i])
+            this.removePossibilities(boardState.ships[i])
         }
         this.removeFromShots(boardState.shots);
     }

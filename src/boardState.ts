@@ -23,7 +23,7 @@ export class BoardState{
         }
         for(var i=0; i< lengths.length; i++){
             for(var j=0; j<placements.length; j++){
-                possibleShipPositions[i].removePosibilities(placements[j]);
+                possibleShipPositions[i].removePossibilities(placements[j]);
             }
             placements.push(possibleShipPositions[i].pickRandomConfiguration());
         }

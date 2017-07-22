@@ -46,7 +46,6 @@ export class ConfigurationGenerator{
 
     public generateConfigurations(num:number, lengths:Array<number>, shots: Array<Shot> = []){
         let hitShots: Array<Shot> = [];
-        console.log(shots[0]);
         for(var i=0; i<shots.length; i++){
             if(shots[i].WasHit){
                 hitShots.push(shots[i]);
