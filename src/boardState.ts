@@ -20,11 +20,20 @@ export class BoardState{
         let possibleShips: Array<ShipPlacement> = [];
         let validShipPositions: Array<ShipPossibilities> = [];
 
+        let numberRemaining: {[length: number]: number} = [];
+
         let shotImpliedPlacementsList: Array<ShotImpliedPlacements> = [];
 
         for(var i=0; i<shipLengths.length; i++){
             validShipPositions.push(new ShipPossibilities(shipLengths[i]));
             validShipPositions[i].removeFromShots(shots);
+
+            if(!numberRemaining[shipLengths[i]]){
+                numberRemaining[shipLengths[i]] = 1;
+            }
+            else{
+                numberRemaining[shipLengths[i]]++;
+            }
         }
 
         for(var i=0; i<hitShots.length; i++){
@@ -36,49 +45,52 @@ export class BoardState{
 
         //sort by #
 
-        let allResolved: boolean= true;
-        if(hitShots.length > 0){
-            allResolved = false;
-        }
+        let numberUnresolved: number= hitShots.length;
 
         //perhaps get valid placements beforehand, and choose one with minimum number of valid placements
 
-        while(!allResolved){
-            //use placeRandomShipFromShot to get next ship
-            //remove the resolved shots
-            //update the valid positions for all the ships
-            //update the allResolved boolean (NOR the list's resolved property)
+        while(numberUnresolved >0){
+            let nextShip:ShipPlacement = shotImpliedPlacementsList[0].pickRandomPlacement();
+            let occupiedPositions: Array<Position> = nextShip.getOccupiedPositions();
+            possibleShips.push(nextShip);
+            numberRemaining[nextShip.length]--;
+            for(var i=0;i<validShipPositions.length; i++){
+                validShipPositions[i].removePossibilities(nextShip);
+            }
+            for(var i=0; i<occupiedPositions.length;i++){
+                for(var j=0; j<shotImpliedPlacementsList.length;j++){
+                    if((!shotImpliedPlacementsList[j].resolved)&&shotImpliedPlacementsList[j].shot.Position == occupiedPositions[i]){
+                        numberUnresolved--;
+                        shotImpliedPlacementsList[j].resolved = true;
+                    }
+                    shotImpliedPlacementsList[j].updateRemainingShips(numberRemaining);
+                    shotImpliedPlacementsList[j].removeInvalidPositions(validShipPositions);
+                }
+            }
 
-            //if at any point validPlacements  == 0,
+            shotImpliedPlacementsList.sort((a,b,)=>{return a.allValidPlacements.length - b.allValidPlacements.length});
         }
 
         //for whatever ships have yet to be placed (needs to be checked)
         //place those ships randomly
 
-        // for(var i=0; i<lengths.length; i++){
-        //     validShipPositions.push(new ShipPossibilities(lengths[i]));
-        //     //possibleShips.push(BoardState.placeNextShip(lengths,possibleShips,shots,i));
-        // }
+        for(var i=0; i<shipLengths.length; i++){
+            if(numberRemaining[shipLengths[i]]>0){
+                let nextShip: ShipPlacement = validShipPositions[i].pickRandomPlacement();
+                for(var j=0; j<validShipPositions.length; j++){
+                    validShipPositions[i].removePossibilities(nextShip);
+                }
+                possibleShips.push(nextShip);
+                numberRemaining[shipLengths[i]]--;
+            }
+        }
         return new BoardState(possibleShips);
 
         //pick first shot
         //choose
     }
 
-    static placeRandomShipFromShot(hitShot: Shot, validShipPositions: Array<ShipPossibilities>):ShipPlacement{
-        if(hitShot.WasHit){
-            let validPlacements: Array<ShipPlacement> = [];
-            for(var i=0; i<validShipPositions.length; i++){
-                validPlacements.concat(validShipPositions[i].getValidShotImpliedPlacements(hitShot));
-            }
-            return validPlacements[randBetween(0,validPlacements.length-1)];
-            //pick a random one
-
-        }
-        else{
-            throw new Error("should be hit only...");
-        }
-    }
+    
 
     public drawShips(){
         let board:Array<Array<boolean>> = this.getBoardArray();

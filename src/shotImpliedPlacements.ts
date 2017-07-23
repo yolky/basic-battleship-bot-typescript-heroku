@@ -4,6 +4,7 @@ import {Direction} from './direction';
 import {Position} from './position';
 import {Shot} from './shot'
 import {ShipPossibilities} from './shipPossibilities'
+import {randBetween} from './random'
 
 export class ShotImpliedPlacements{
     private static initialShotImpliedPlacements: {[length: number]:Array<Array<Array<ShipPlacement>>>} = {};
@@ -29,11 +30,11 @@ export class ShotImpliedPlacements{
                 ShotImpliedPlacements.initialShotImpliedPlacements[length][i].push([]);
                 let minRow: number = Math.max(0,i-(length-1));
                 for(var g = minRow; g<i; g++){
-                    ShotImpliedPlacements[length][i][j].initialShotImpliedPlacements(new ShipPlacement(Direction.Vertical, length, new Position(g,j)));
+                    ShotImpliedPlacements.initialShotImpliedPlacements[length][i][j].push(new ShipPlacement(Direction.Vertical, length, new Position(g,j)));
                 }
                 let minCol: number = Math.max(0,j-(length-1));
                 for(var g = minCol; g<j; g++){
-                    ShotImpliedPlacements[length][i][j].initialShotImpliedPlacements(new ShipPlacement(Direction.Horizontal, length, new Position(j,g)));
+                    ShotImpliedPlacements.initialShotImpliedPlacements[length][i][j].push(new ShipPlacement(Direction.Horizontal, length, new Position(j,g)));
                 }
             }
         }
@@ -69,5 +70,22 @@ export class ShotImpliedPlacements{
                 ans.push(this.validPlacementsByLength[key][i]);
             }
         }
+    }
+
+    public updateRemainingShips(numberRemaining: {[length:number]:number}):void{
+        let updateNeeded:boolean = false;
+        for(var key in numberRemaining){
+            if(numberRemaining[key]==0 &&this.validPlacementsByLength[key].length >0){
+                this.validPlacementsByLength[key] = [];
+                updateNeeded = true;
+            }
+        }
+        if(updateNeeded){
+            this.generateSingleValidPlacementsList();
+        }
+    }
+
+    public pickRandomPlacement ():ShipPlacement{
+        return this.allValidPlacements[randBetween(0,this.allValidPlacements.length-1)];
     }
 }
