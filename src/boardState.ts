@@ -15,7 +15,7 @@ export class BoardState{
         this.shots = shots;
     }
 
-    static tryGetRandomSet(shipLengths: Array<number>, shots:Array<Shot> = [], hitShots: Array<Shot> = []):{state: BoardState, found: boolean}
+    static tryGetRandomSet(shipLengths: Array<number>, shots:Array<Shot> = [], hitShots: Array<Shot> = [], pathToFollow: number[] = [], exhaustive:boolean = false):{state: BoardState, found: boolean, nextPath: number[]}
     {
         let possibleShips: Array<ShipPlacement> = [];
         let validShipPositions: Array<ShipPossibilities> = [];
@@ -23,6 +23,13 @@ export class BoardState{
         let numberRemaining: {[length: number]: number} = [];
 
         let shotImpliedPlacementsList: Array<ShotImpliedPlacements> = [];
+
+        let currentPathIndex = 0; //how many guesses deep it is
+        let currentPath: Array<number> = []; //the path of guesses it is currently following
+        
+        if(exhaustive){
+            console.log(pathToFollow);
+        }
 
         for(var i=0; i<shipLengths.length; i++){
             validShipPositions.push(new ShipPossibilities(shipLengths[i]));
@@ -63,12 +70,35 @@ export class BoardState{
             
             let nextShip:ShipPlacement
             if(firstUnresolved.allValidPlacements.length>0){
-                nextShip = firstUnresolved.pickRandomPlacement();
+                if(!exhaustive){
+                    nextShip = firstUnresolved.pickRandomPlacement();
+                }
+                else{
+                    let nextStep: number = 0;
+                    if(pathToFollow.length > currentPathIndex){ //if the length is good
+                        nextStep = pathToFollow[currentPathIndex];
+                        if(nextStep > firstUnresolved.allValidPlacements.length-1){
+                            let nextPath:number[] = currentPath;
+                            nextPath[nextPath.length-1]++;
+                            return {state: new BoardState([]),found:false, nextPath: nextPath};
+                        }
+                    }
+                    currentPathIndex++;
+                    currentPath.push(nextStep);
+                    nextShip = firstUnresolved.allValidPlacements[nextStep]
+                }
             }
             else{
-                return {state: new BoardState([]), found:false};
+                if(!exhaustive)
+                {
+                    return {state: new BoardState([]), found:false, nextPath: []};
+                }else{
+                    let nextPath:number[] = currentPath;
+                    nextPath[nextPath.length-1]++;
+                    return {state: new BoardState([]),found:false, nextPath: nextPath};
+                }
             }
-            
+
             let occupiedPositions: Array<Position> = nextShip.getOccupiedPositions();
 
             possibleShips.push(nextShip);
@@ -103,10 +133,40 @@ export class BoardState{
         for(var i=0; i<shipLengths.length; i++){
             if(numberRemaining[shipLengths[i]]>0){
                 let nextShip: ShipPlacement;
-                if(validShipPositions[i].numberOfPossibilities >0){
-                    nextShip= validShipPositions[i].pickRandomPlacement();      
-                }else{
-                    return {state: new BoardState([]), found:false};
+                // if(validShipPositions[i].numberOfPossibilities >0){
+                //     nextShip= validShipPositions[i].pickRandomPlacement();      
+                // }else{
+                //     return {state: new BoardState([]), found:false};
+                // }
+
+                if(validShipPositions[i].numberOfPossibilities>0){
+                    if(!exhaustive){
+                        nextShip = validShipPositions[i].pickRandomPlacement();
+                    }
+                    else{
+                        let nextStep: number = 0;
+                        if(pathToFollow.length > currentPathIndex){
+                            nextStep = pathToFollow[currentPathIndex];
+                            if(nextStep > validShipPositions[i].numberOfPossibilities-1){
+                                let nextPath:number[] = currentPath;
+                                nextPath[nextPath.length-1]++;
+                                return {state: new BoardState([]),found:false, nextPath: nextPath};
+                            }
+                        }
+                        currentPathIndex++;
+                        currentPath.push(nextStep);
+                        nextShip = validShipPositions[i].pickSpecificPlacement(nextStep);
+                    }
+                }
+                else{
+                    if(!exhaustive)
+                    {
+                        return {state: new BoardState([]), found:false, nextPath: []};
+                    }else{
+                        let nextPath:number[] = currentPath;
+                        nextPath[nextPath.length-1]++;
+                        return {state: new BoardState([]),found:false, nextPath: nextPath};
+                    }
                 }
                 
                 for(var j=0; j<validShipPositions.length; j++){
@@ -116,19 +176,26 @@ export class BoardState{
                 numberRemaining[shipLengths[i]]--;
             }
         }
-        return {state: new BoardState(possibleShips), found:true}
+        let nextPath:number[] = currentPath;
+        nextPath[nextPath.length-1]++;
+        return {state: new BoardState(possibleShips), found:true, nextPath}
 
         //pick first shot
         //choose
     }
 
-    static getRandomSet(shipLengths: Array<number>, shots:Array<Shot> = [], hitShots: Array<Shot> = []):BoardState{
-        let returnValue: {state: BoardState, found: boolean};
+    static getRandomSet(shipLengths: Array<number>, shots:Array<Shot> = [], hitShots: Array<Shot> = []):{state:BoardState, doSwitch:boolean, nextPath: number[]}{
+        let returnValue: {state: BoardState, nextPath:number[], found: boolean};
+        let tries:number =0;
         do{
-            
+            tries++;
             returnValue = BoardState.tryGetRandomSet(shipLengths, shots, hitShots);
+            if(tries>100){
+                return {state: returnValue.state, doSwitch:true, nextPath: []}
+            }
         }while(!returnValue.found)
-        return returnValue.state;
+        console.log(tries);
+        return {state: returnValue.state, doSwitch:false, nextPath: []};
     }
     
 
@@ -170,12 +237,22 @@ export class BoardState{
         return board;
     }
 
-    public static getRandomBoardArray(lengths: Array<number>, shots: Array<Shot>,hitShots: Array<Shot>):Array<Array<boolean>>{
-        return BoardState.getRandomSet(lengths,shots,hitShots).getBoardArray();
-    }
+    // public static getRandomBoardArray(lengths: Array<number>, shots: Array<Shot>,hitShots: Array<Shot>, exhaustive:boolean = false):Array<Array<boolean>>{
+    //     if(!exhaustive)
+    //     {
+    //         let returnValue = BoardState.getRandomSet(lengths,shots,hitShots).state.getBoardArray();
+    //         if(returnValue)
+    //     }else{
+    //         return BoardState.getSetExhaustive(lengths,shots,hitShots,path,true)
+    //     }
+        
+    // }
 
     public static getRandomStartingConfiguration(lengths: Array<number>):Array<ShipPlacement>{
         return BoardState.getRandomSet(lengths).ships;
     }
     
+    static getSetExhaustive(){
+
+    }
 }

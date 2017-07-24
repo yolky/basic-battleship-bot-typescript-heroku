@@ -158,19 +158,26 @@ export class ShipPossibilities{
         return {configs: currentPossibilities,size: count};
     }
 
-    public pickRandomPlacement(){
+    public pickRandomPlacement():ShipPlacement{
         //get random number up to possibility count
         //choose that one from the list
         //generate the thing
         let randIndex:number = randBetween(0,this.numberOfPossibilities-1);
 
+        return this.pickSpecificPlacement(randIndex);
+
+        
+        //then rowIndex is good
+    }
+
+    public pickSpecificPlacement(chosenIndex:number):ShipPlacement{
         let currentIndex: number = -1; //increase this until >= rand
         let rowIndex: number = -1;
         do{
             rowIndex++;
             currentIndex += this.possibilities[rowIndex].numInRow;
-        }while(currentIndex<randIndex);
-        let indexInRow: number = (this.possibilities[rowIndex].numInRow-1)+randIndex - currentIndex;
+        }while(currentIndex<chosenIndex);
+        let indexInRow: number = (this.possibilities[rowIndex].numInRow-1)+chosenIndex - currentIndex;
         let currentIndexInRow:number = -1;
         for(var i=0; i<10; i++){
             if(this.possibilities[rowIndex].row[i].horizontal){
@@ -186,7 +193,6 @@ export class ShipPossibilities{
                 return new ShipPlacement(Direction.Vertical, this.length, new Position(rowIndex,i));
             }
         }
-        //then rowIndex is good
     }
 }
 

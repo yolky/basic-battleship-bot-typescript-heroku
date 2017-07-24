@@ -7,7 +7,9 @@ export class ConfigurationGenerator{
     public boardCounter: Array<Array<number>>;
     public squaresHit: Array<Array<boolean>>;
 
-    public lastNum=0;
+    public lastNum:number=0;
+    private nextPath: number[] = [];
+    private exhaustive: boolean = false;
 
     public constructor(){
         this.boardCounter = [];
@@ -25,20 +27,30 @@ export class ConfigurationGenerator{
     public generateConfiguration(lengths:Array<number>, shots: Array<Shot> = [], hitShots:Array<Shot> = []):void{
         let compatible: boolean = false;
         let boardToAdd: Array<Array<boolean>>;
-        // while(!compatible){
-        //     boardToAdd = BoardState.getRandomBoardArray(lengths, shots);
-        //     compatible = true;
-        //     for(var i =0; i<hitShots.length; i++){
-        //         //console.log(lengths);
-        //         //console.log(hitShots[i].Position.row + ','+hitShots[i].Position.col);
-        //         if(!boardToAdd[hitShots[i].Position.row][hitShots[i].Position.col]){
-        //             compatible = false;
-        //             break;
-        //         }
-        //     }
-        //}
        
-        boardToAdd = BoardState.getRandomBoardArray(lengths,shots,hitShots);
+        
+        if(!this.exhaustive){
+            let returnValue: {state:BoardState, doSwitch:boolean, nextPath: number[]}  = BoardState.getRandomSet(lengths,shots,hitShots);
+            if(returnValue.doSwitch){
+                this.exhaustive = true;
+                this.nextPath = returnValue.nextPath;
+            }else{
+                boardToAdd = returnValue.state.getBoardArray();
+            }
+        }else{
+
+            
+
+            let returnValue: {state:BoardState, found:boolean, nextPath: number[]};
+            returnValue = BoardState.tryGetRandomSet(lengths,shots,hitShots,this.nextPath,true);
+            this.nextPath = returnValue.nextPath;
+            boardToAdd = returnValue.state.getBoardArray();
+        }
+        
+
+        
+
+        if(boardToAdd)
         
         for(var i=0;i <Globals.BOARD_ROWS; i++){
             for(var j = 0; j<Globals.BOARD_COLS; j++){
