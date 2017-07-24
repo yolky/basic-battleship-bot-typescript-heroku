@@ -81,7 +81,7 @@ export class ShotImpliedPlacements{
     public updateRemainingShips(numberRemaining: {[length:number]:number}):void{
         let updateNeeded:boolean = false;
         for(var key in numberRemaining){
-            if(numberRemaining[key]==0 &&this.validPlacementsByLength[key].length >0){
+            if(numberRemaining[key]==0 && this.validPlacementsByLength[key].length >0){
                 this.validPlacementsByLength[key] = [];
                 updateNeeded = true;
             }
