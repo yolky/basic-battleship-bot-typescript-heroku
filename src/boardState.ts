@@ -57,6 +57,7 @@ export class BoardState{
                     firstUnresolved = shotImpliedPlacementsList[index];
                 }
             }
+            
             let nextShip:ShipPlacement
             if(firstUnresolved.allValidPlacements.length>0){
                 nextShip = firstUnresolved.pickRandomPlacement();
@@ -72,15 +73,19 @@ export class BoardState{
             for(var i=0;i<validShipPositions.length; i++){
                 validShipPositions[i].removePossibilities(nextShip);
             }
-            for(var i=0; i<occupiedPositions.length;i++){
-                for(var j=0; j<shotImpliedPlacementsList.length;j++){
-                    if((!shotImpliedPlacementsList[j].resolved)&&shotImpliedPlacementsList[j].shot.Position == occupiedPositions[i]){
+            
+            for(var j=0; j<shotImpliedPlacementsList.length;j++){
+                for(var i=0; i<occupiedPositions.length;i++){
+                    
+                    if((!shotImpliedPlacementsList[j].resolved)&& Position.isEqual(shotImpliedPlacementsList[j].shot.Position, occupiedPositions[i])){
+                        
                         numberUnresolved--;
                         shotImpliedPlacementsList[j].resolved = true;
                     }
-                    shotImpliedPlacementsList[j].updateRemainingShips(numberRemaining);
-                    shotImpliedPlacementsList[j].removeInvalidPositions(validShipPositions);
+                    
                 }
+                shotImpliedPlacementsList[j].updateRemainingShips(numberRemaining);
+                shotImpliedPlacementsList[j].removeInvalidPositions(validShipPositions);
             }
 
             shotImpliedPlacementsList.sort((a,b,)=>{return a.allValidPlacements.length - b.allValidPlacements.length});
@@ -114,6 +119,7 @@ export class BoardState{
     static getRandomSet(shipLengths: Array<number>, shots:Array<Shot> = [], hitShots: Array<Shot> = []):BoardState{
         let returnValue: {state: BoardState, found: boolean};
         do{
+            console.log("here");
             returnValue = BoardState.tryGetRandomSet(shipLengths, shots, hitShots);
         }while(!returnValue.found)
         return returnValue.state;

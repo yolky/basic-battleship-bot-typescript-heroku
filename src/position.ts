@@ -21,5 +21,11 @@ export class Position{
         return new Position(char.charCodeAt(0) - 65, _col-1);
     }
 
+    public deepClone():Position{
+        return new Position(this.row, this.col);
+    }
 
+    static isEqual(a: Position, b:Position):boolean{
+        return (a.row == b.row) && (a.col == b.col);
+    }
 }

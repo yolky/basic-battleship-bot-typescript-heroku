@@ -37,4 +37,8 @@ export class ShipPlacement{
         }
         return ans;
     }
+
+    public deepClone():ShipPlacement{
+        return new ShipPlacement(this.orientation, this.length, this.position.deepClone());
+    }
 }

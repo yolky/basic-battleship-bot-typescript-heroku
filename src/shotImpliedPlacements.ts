@@ -10,14 +10,18 @@ export class ShotImpliedPlacements{
     private static initialShotImpliedPlacements: {[length: number]:Array<Array<Array<ShipPlacement>>>} = {};
     public shot: Shot;
     public resolved = false;
-    private validPlacementsByLength: {[length:number]: Array<ShipPlacement>};
+    private validPlacementsByLength: {[length:number]: Array<ShipPlacement>} = {};
 
     public allValidPlacements: Array<ShipPlacement> = [];
     
     public constructor(shot:Shot){
         this.shot = shot;
         for(var key in ShotImpliedPlacements.initialShotImpliedPlacements){
-            this.validPlacementsByLength[key] = JSON.parse(JSON.stringify(ShotImpliedPlacements[key][this.shot.Position.row][this.shot.Position.col]));
+            this.validPlacementsByLength[key] = [];
+            let listToCopy: Array<ShipPlacement> = ShotImpliedPlacements.initialShotImpliedPlacements[key][this.shot.Position.row][this.shot.Position.col]
+            for(var i=0; i<listToCopy.length; i++){
+                this.validPlacementsByLength[key].push(listToCopy[i].deepClone());
+            }
             //deep copy again
         }
     }
@@ -50,7 +54,8 @@ export class ShotImpliedPlacements{
     public removeInvalidPositionsSingle(shipToCheck: ShipPossibilities, remakeList:boolean = true){
         for(var i=0; i<this.validPlacementsByLength[shipToCheck.length].length; i++){
             let currentPlacement: ShipPlacement = this.validPlacementsByLength[shipToCheck.length][i];
-            let selectedPossibilitySet: {horizontal: boolean, vertical:boolean} = shipToCheck.possibilities[currentPlacement.position.row][currentPlacement.position.col];
+
+            let selectedPossibilitySet: {horizontal: boolean, vertical:boolean} = shipToCheck.possibilities[currentPlacement.position.row].row[currentPlacement.position.col];
             
             //if invalid
             if(!((selectedPossibilitySet.horizontal && currentPlacement.orientation == Direction.Horizontal)
@@ -70,6 +75,7 @@ export class ShotImpliedPlacements{
                 ans.push(this.validPlacementsByLength[key][i]);
             }
         }
+        this.allValidPlacements = ans;
     }
 
     public updateRemainingShips(numberRemaining: {[length:number]:number}):void{

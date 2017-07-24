@@ -33,6 +33,7 @@ export class ConfigurationGenerator{
         //         }
         //     }
         //}
+       
         boardToAdd = BoardState.getRandomBoardArray(lengths,shots,hitShots);
         
         for(var i=0;i <Globals.BOARD_ROWS; i++){
