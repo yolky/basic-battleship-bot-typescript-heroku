@@ -22,6 +22,7 @@ export class ShotImpliedPlacements{
             for(var i=0; i<listToCopy.length; i++){
                 this.validPlacementsByLength[key].push(listToCopy[i].deepClone());
             }
+
             //deep copy again
         }
     }
@@ -38,7 +39,7 @@ export class ShotImpliedPlacements{
                 }
                 let minCol: number = Math.max(0,j-(length-1));
                 for(var g = minCol; g<j; g++){
-                    ShotImpliedPlacements.initialShotImpliedPlacements[length][i][j].push(new ShipPlacement(Direction.Horizontal, length, new Position(j,g)));
+                    ShotImpliedPlacements.initialShotImpliedPlacements[length][i][j].push(new ShipPlacement(Direction.Horizontal, length, new Position(i,g)));
                 }
             }
         }

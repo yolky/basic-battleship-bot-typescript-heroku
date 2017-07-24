@@ -53,7 +53,7 @@ export class ConfigurationGenerator{
             }
         }
         for(var i=0;i<num;i++){
-
+            
             this.generateConfiguration(lengths, shots, hitShots);
         }
         this.lastNum = num;
