@@ -23,6 +23,7 @@ export class ShotImpliedPlacements{
                 this.validPlacementsByLength[key].push(listToCopy[i].deepClone());
             }
 
+            this.generateSingleValidPlacementsList();
             //deep copy again
         }
     }
@@ -34,11 +35,11 @@ export class ShotImpliedPlacements{
             for(var j=0; j<Globals.BOARD_COLS; j++){
                 ShotImpliedPlacements.initialShotImpliedPlacements[length][i].push([]);
                 let minRow: number = Math.max(0,i-(length-1));
-                for(var g = minRow; g<i; g++){
+                for(var g = minRow; g<=i; g++){
                     ShotImpliedPlacements.initialShotImpliedPlacements[length][i][j].push(new ShipPlacement(Direction.Vertical, length, new Position(g,j)));
                 }
                 let minCol: number = Math.max(0,j-(length-1));
-                for(var g = minCol; g<j; g++){
+                for(var g = minCol; g<=j; g++){
                     ShotImpliedPlacements.initialShotImpliedPlacements[length][i][j].push(new ShipPlacement(Direction.Horizontal, length, new Position(i,g)));
                 }
             }
