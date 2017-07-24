@@ -17,7 +17,6 @@ export class ShipPlacer{
         this.shipLengths = shipLengths;
 
         for(var i=0; i<this.shipLengths.length; i++){
-            this.shipPossibilitiesByLength[this.shipLengths[i]] = new ShipPossibilities(this.shipLengths[i]);
             if(!this.numberOfShipsOfLength[shipLengths[i]]){
                 this.numberOfShipsOfLength[shipLengths[i]] = 1;
             }else{
@@ -33,6 +32,12 @@ export class ShipPlacer{
 
         this.addDynamicWeights()
         
+    }
+
+    private remakePossibilities(){
+        for(var i=0; i<this.shipLengths.length; i++){
+            this.shipPossibilitiesByLength[this.shipLengths[i]] = new ShipPossibilities(this.shipLengths[i]);
+        }
     }
 
     private zeroWeights(){
@@ -115,6 +120,8 @@ export class ShipPlacer{
     }
 
     public chooseConfiguration():Array<ShipPlacement>{
+
+        
 
         this.zeroWeights();
 

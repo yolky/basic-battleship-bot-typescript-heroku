@@ -26,7 +26,7 @@ export class MyBot {
         let shotList: Array<Shot> = gamestate.MyShots.map((x)=> {
             return {Position: Position.letterFormatToPosition(x.Position.Row, x.Position.Column), WasHit: x.WasHit};
         });
-        generator.generateConfigurations(300,[5,4,3,3,2], shotList);
+        generator.generateConfigurations(200,[5,4,3,3,2], shotList);
         console.log(JSON.stringify(gamestate));
 
         let opponentShots: Array<Shot> = gamestate.OpponentsShots.map((x)=> {
