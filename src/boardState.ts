@@ -15,7 +15,7 @@ export class BoardState{
         this.shots = shots;
     }
 
-    static getRandomSet(shipLengths: Array<number>, shots:Array<Shot> = [], hitShots: Array<Shot> = []):BoardState
+    static tryGetRandomSet(shipLengths: Array<number>, shots:Array<Shot> = [], hitShots: Array<Shot> = []):{state: BoardState, found: boolean}
     {
         let possibleShips: Array<ShipPlacement> = [];
         let validShipPositions: Array<ShipPossibilities> = [];
@@ -57,7 +57,14 @@ export class BoardState{
                     firstUnresolved = shotImpliedPlacementsList[index];
                 }
             }
-            let nextShip:ShipPlacement = firstUnresolved.pickRandomPlacement();
+            let nextShip:ShipPlacement
+            if(firstUnresolved.allValidPlacements.length>0){
+                nextShip = firstUnresolved.pickRandomPlacement();
+            }
+            else{
+                return {state: new BoardState([]), found:false};
+            }
+            
 
             let occupiedPositions: Array<Position> = nextShip.getOccupiedPositions();
             possibleShips.push(nextShip);
@@ -84,7 +91,13 @@ export class BoardState{
 
         for(var i=0; i<shipLengths.length; i++){
             if(numberRemaining[shipLengths[i]]>0){
-                let nextShip: ShipPlacement = validShipPositions[i].pickRandomPlacement();
+                let nextShip: ShipPlacement;
+                if(validShipPositions[i].numberOfPossibilities >0){
+                    nextShip= validShipPositions[i].pickRandomPlacement();      
+                }else{
+                    return {state: new BoardState([]), found:false};
+                }
+                
                 for(var j=0; j<validShipPositions.length; j++){
                     validShipPositions[j].removePossibilities(nextShip);
                 }
@@ -92,12 +105,19 @@ export class BoardState{
                 numberRemaining[shipLengths[i]]--;
             }
         }
-        return new BoardState(possibleShips);
+        return {state: new BoardState(possibleShips), found:true}
 
         //pick first shot
         //choose
     }
 
+    static getRandomSet(shipLengths: Array<number>, shots:Array<Shot> = [], hitShots: Array<Shot> = []):BoardState{
+        let returnValue: {state: BoardState, found: boolean};
+        do{
+            let returnValue = BoardState.tryGetRandomSet(shipLengths, shots, hitShots);
+        }while(!returnValue.found)
+        return returnValue.state;
+    }
     
 
     public drawShips(){

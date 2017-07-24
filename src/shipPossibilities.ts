@@ -9,7 +9,7 @@ import {ShotImpliedPlacements} from './shotImpliedPlacements'
 
 export class ShipPossibilities{
     public length: number;
-    private numberOfPossibilities:number;
+    public numberOfPossibilities:number;
     public possibilities: ConfigurationSet;
     private static initialPosAndNum: {[length: number]: {configs: ConfigurationSet, size: number}} = {};
 
