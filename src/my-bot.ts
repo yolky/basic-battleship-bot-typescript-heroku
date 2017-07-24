@@ -3,6 +3,7 @@ import {randBetween} from './random';
 import {BoardState} from './boardState';
 import {ConfigurationGenerator} from './configurationGenerator';
 import {Shot} from './shot';
+import {ShipPlacer} from './shipPlacer';
 
 export class MyBot {
     static letters:string = 'ABCDEFGHIJ';
@@ -15,7 +16,9 @@ export class MyBot {
         //     { StartingSquare: { Row: "G", Column: 1 }, EndingSquare : { Row: "G", Column: 3 } },
         //     { StartingSquare: { Row: "I", Column: 1 }, EndingSquare : { Row: "I", Column: 2 } },
         // ]
-        return BoardState.getRandomStartingConfiguration([5,4,3,3,2]);
+        //return BoardState.getRandomStartingConfiguration([5,4,3,3,2]);
+        let shipPlacer = new ShipPlacer([5,4,3,3,2]);
+        return shipPlacer.chooseConfiguration();
     }
 
     public selectTarget(gamestate) {

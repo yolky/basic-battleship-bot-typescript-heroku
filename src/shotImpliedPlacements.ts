@@ -7,7 +7,7 @@ import {ShipPossibilities} from './shipPossibilities'
 import {randBetween} from './random'
 
 export class ShotImpliedPlacements{
-    private static initialShotImpliedPlacements: {[length: number]:Array<Array<Array<ShipPlacement>>>} = {};
+    public static initialShotImpliedPlacements: {[length: number]:Array<Array<Array<ShipPlacement>>>} = {};
     public shot: Shot;
     public resolved = false;
     private validPlacementsByLength: {[length:number]: Array<ShipPlacement>} = {};
