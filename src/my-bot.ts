@@ -23,21 +23,36 @@ export class MyBot {
 
     public selectTarget(gamestate) {
         let generator = new ConfigurationGenerator();
-        let shotList: Array<Shot> = gamestate.MyShots.map((x)=> {
-            return {Position: Position.letterFormatToPosition(x.Position.Row, x.Position.Column), WasHit: x.WasHit};
-        });
+        let shotList: Array<Shot>;
+        if(!gamestate.MyShots){
+            shotList = [];
+        }else{
+            shotList = gamestate.MyShots.map((x)=> {
+                return {Position: Position.letterFormatToPosition(x.Position.Row, x.Position.Column), WasHit: x.WasHit};
+            });
+        }
+        
         generator.generateConfigurations(200,[5,4,3,3,2], shotList);
         console.log(JSON.stringify(gamestate));
 
-        let opponentShots: Array<Shot> = gamestate.OpponentsShots.map((x)=> {
-            return {Position: Position.letterFormatToPosition(x.Position.Row, x.Position.Column), WasHit: false};
-        });
+        let opponentShots: Array<Shot>;
 
-        if(opponentShots.length == 1&&gamestate.GameCount == 1){
+        if(!gamestate.OpponentsShots){
+            opponentShots = [];
+        }else{
+            opponentShots = gamestate.OpponentsShots.map((x)=> {
+                return {Position: Position.letterFormatToPosition(x.Position.Row, x.Position.Column), WasHit: false};
+            });
+        }
+
+        if((opponentShots.length == 1|| opponentShots.length == 0)&&gamestate.GameCount == 1){
             MyBot.shipPlacer = new ShipPlacer([5,4,3,3,2]);
         }
 
-        MyBot.shipPlacer.penalizePosition(opponentShots[opponentShots.length-1].Position, opponentShots.length);
+        if(opponentShots.length>0){
+            MyBot.shipPlacer.penalizePosition(opponentShots[opponentShots.length-1].Position, opponentShots.length);
+        }
+        
 
         return generator.getMaxPosition();
 
