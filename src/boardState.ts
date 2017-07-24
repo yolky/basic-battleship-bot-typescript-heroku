@@ -50,7 +50,6 @@ export class BoardState{
         //perhaps get valid placements beforehand, and choose one with minimum number of valid placements
 
         while(numberUnresolved >0){
-            console.log(numberUnresolved);
 
             let firstUnresolved:ShotImpliedPlacements;
             let index: number =0;
@@ -67,14 +66,13 @@ export class BoardState{
                 nextShip = firstUnresolved.pickRandomPlacement();
             }
             else{
-                console.log("asdf");
                 return {state: new BoardState([]), found:false};
             }
             
             
 
             let occupiedPositions: Array<Position> = nextShip.getOccupiedPositions();
-            
+
             possibleShips.push(nextShip);
             numberRemaining[nextShip.length]--;
             for(var i=0;i<validShipPositions.length; i++){
