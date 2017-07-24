@@ -129,11 +129,7 @@ export class BoardState{
         for(var i=0; i<shipLengths.length; i++){
             if(numberRemaining[shipLengths[i]]>0){
                 let nextShip: ShipPlacement;
-                // if(validShipPositions[i].numberOfPossibilities >0){
-                //     nextShip= validShipPositions[i].pickRandomPlacement();      
-                // }else{
-                //     return {state: new BoardState([]), found:false};
-                // }
+
 
                 if(validShipPositions[i].numberOfPossibilities>0){
                     if(!exhaustive){
@@ -186,7 +182,7 @@ export class BoardState{
         do{
             tries++;
             returnValue = BoardState.tryGetRandomSet(shipLengths, shots, hitShots);
-            if(tries>20){
+            if(tries>12){
                 return {state: returnValue.state, doSwitch:true, nextPath: []}
             }
         }while(!returnValue.found)
@@ -232,16 +228,6 @@ export class BoardState{
         return board;
     }
 
-    // public static getRandomBoardArray(lengths: Array<number>, shots: Array<Shot>,hitShots: Array<Shot>, exhaustive:boolean = false):Array<Array<boolean>>{
-    //     if(!exhaustive)
-    //     {
-    //         let returnValue = BoardState.getRandomSet(lengths,shots,hitShots).state.getBoardArray();
-    //         if(returnValue)
-    //     }else{
-    //         return BoardState.getSetExhaustive(lengths,shots,hitShots,path,true)
-    //     }
-        
-    // }
 
     public static getRandomStartingConfiguration(lengths: Array<number>):Array<ShipPlacement>{
         return BoardState.getRandomSet(lengths).state.ships;
