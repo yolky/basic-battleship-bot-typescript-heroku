@@ -114,7 +114,8 @@ export class BoardState{
     static getRandomSet(shipLengths: Array<number>, shots:Array<Shot> = [], hitShots: Array<Shot> = []):BoardState{
         let returnValue: {state: BoardState, found: boolean};
         do{
-            let returnValue = BoardState.tryGetRandomSet(shipLengths, shots, hitShots);
+            returnValue = BoardState.tryGetRandomSet(shipLengths, shots, hitShots);
+
         }while(!returnValue.found)
         return returnValue.state;
     }
