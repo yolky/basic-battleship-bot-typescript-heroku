@@ -50,8 +50,6 @@ export class BoardState{
         //perhaps get valid placements beforehand, and choose one with minimum number of valid placements
 
         while(numberUnresolved >0){
-
-            console.log(numberUnresolved);
             
             let firstUnresolved:ShotImpliedPlacements;
             let index: number =0;
