@@ -3,7 +3,7 @@ import * as bodyParser from 'body-parser';
 import {MyBot} from './src/my-bot';
 import {Position} from './src/position'
 import {Direction} from './src/direction';
-import {ShipPlacement} from './src/shipConfiguration';
+import {ShipPlacement} from './src/shipPlacement';
 import {ShipPossibilities} from './src/shipPossibilities';
 import {BoardState} from './src/boardState';
 import {ConfigurationGenerator} from './src/configurationGenerator';
