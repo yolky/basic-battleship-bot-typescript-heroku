@@ -45,7 +45,6 @@ export class ConfigurationGenerator{
             returnValue = BoardState.tryGetRandomSet(lengths,shots,hitShots,this.nextPath,true);
             this.nextPath = returnValue.nextPath;
             if(returnValue.found){
-                console.log("here");
                 this.addShipsToGrid(returnValue.state.ships);
             }
         }
