@@ -24,7 +24,7 @@ export class MyBot {
             return {Position: Position.letterFormatToPosition(x.Position.Row, x.Position.Column), WasHit: x.WasHit};
         });
         generator.generateConfigurations(100,[5,4,3,3,2], shotList);
-        console.log(gamestate);
+        console.log(JSON.stringify(gamestate));
         return generator.getMaxPosition();
         //return this.getRandomTarget(gamestate);
         // var previousShot = gamestate.MyShots && gamestate.MyShots[gamestate.MyShots.length-1];
