@@ -245,7 +245,7 @@ export class BoardState{
     // }
 
     public static getRandomStartingConfiguration(lengths: Array<number>):Array<ShipPlacement>{
-        return BoardState.getRandomSet(lengths).ships;
+        return BoardState.getRandomSet(lengths).state.ships;
     }
     
     static getSetExhaustive(){
