@@ -24,6 +24,8 @@ export class ShipPlacer{
             }
         }
 
+        this.remakePossibilities();
+
         this.zeroWeights();
         
         this.initializeDynamicWeights();
@@ -121,7 +123,7 @@ export class ShipPlacer{
 
     public chooseConfiguration():Array<ShipPlacement>{
 
-        
+        this.remakePossibilities();
 
         this.zeroWeights();
 
