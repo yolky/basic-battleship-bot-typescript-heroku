@@ -32,6 +32,11 @@ export class MyBot {
         let opponentShots: Array<Shot> = gamestate.OpponentsShots.map((x)=> {
             return {Position: Position.letterFormatToPosition(x.Position.Row, x.Position.Column), WasHit: false};
         });
+
+        if(opponentShots.length == 1&&gamestate.GameCount == 1){
+            MyBot.shipPlacer = new ShipPlacer([5,4,3,3,2]);
+        }
+
         MyBot.shipPlacer.penalizePosition(opponentShots[opponentShots.length-1].Position, opponentShots.length);
 
         return generator.getMaxPosition();
