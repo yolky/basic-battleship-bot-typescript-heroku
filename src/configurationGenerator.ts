@@ -77,8 +77,6 @@ export class ConfigurationGenerator{
             this.generateConfiguration(lengths, shots, hitShots);
         }
 
-        console.log("sdf");
-
        
     }
 

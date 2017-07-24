@@ -32,7 +32,7 @@ export class MyBot {
             });
         }
         
-        generator.generateConfigurations(100,[5,4,3,3,2], shotList);
+        generator.generateConfigurations(80,[5,4,3,3,2], shotList);
         console.log(JSON.stringify(gamestate));
 
         let opponentShots: Array<Shot>;
