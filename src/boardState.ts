@@ -50,19 +50,28 @@ export class BoardState{
         //perhaps get valid placements beforehand, and choose one with minimum number of valid placements
 
         while(numberUnresolved >0){
+
+            console.log(numberUnresolved);
+            
             let firstUnresolved:ShotImpliedPlacements;
             let index: number =0;
+
+            
+            console.log("a");
             while(!firstUnresolved){
                 if(shotImpliedPlacementsList[index].resolved == false){
                     firstUnresolved = shotImpliedPlacementsList[index];
                 }
+                index++;
             }
+            console.log("b");
             
             let nextShip:ShipPlacement
             if(firstUnresolved.allValidPlacements.length>0){
                 nextShip = firstUnresolved.pickRandomPlacement();
             }
             else{
+                console.log("he333re");
                 return {state: new BoardState([]), found:false};
             }
             
@@ -91,8 +100,12 @@ export class BoardState{
             shotImpliedPlacementsList.sort((a,b,)=>{return a.allValidPlacements.length - b.allValidPlacements.length});
         }
 
+        console.log(numberUnresolved);
+
         //for whatever ships have yet to be placed (needs to be checked)
         //place those ships randomly
+
+        
 
         for(var i=0; i<shipLengths.length; i++){
             if(numberRemaining[shipLengths[i]]>0){
@@ -100,6 +113,7 @@ export class BoardState{
                 if(validShipPositions[i].numberOfPossibilities >0){
                     nextShip= validShipPositions[i].pickRandomPlacement();      
                 }else{
+                    console.log("here");
                     return {state: new BoardState([]), found:false};
                 }
                 
