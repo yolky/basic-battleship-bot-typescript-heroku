@@ -186,11 +186,10 @@ export class BoardState{
         do{
             tries++;
             returnValue = BoardState.tryGetRandomSet(shipLengths, shots, hitShots);
-            if(tries>100){
+            if(tries>60){
                 return {state: returnValue.state, doSwitch:true, nextPath: []}
             }
         }while(!returnValue.found)
-        console.log(tries);
         return {state: returnValue.state, doSwitch:false, nextPath: []};
     }
     
