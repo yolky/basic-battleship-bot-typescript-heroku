@@ -5,15 +5,19 @@ import {Position} from './position'
 
 export class ConfigurationGenerator{
     public boardCounter: Array<Array<number>>;
+    public squaresHit: Array<Array<boolean>>;
 
     public lastNum=0;
 
     public constructor(){
         this.boardCounter = [];
+        this.squaresHit = [];
         for(var i=0;i <Globals.BOARD_ROWS; i++){
-            this.boardCounter.push([])
+            this.boardCounter.push([]);
+            this.squaresHit.push([]);
             for(var j = 0; j<Globals.BOARD_COLS; j++){
                 this.boardCounter[i].push(0);
+                this.squaresHit[i].push(false);
             }
         }        
     }
@@ -48,10 +52,13 @@ export class ConfigurationGenerator{
     public generateConfigurations(num:number, lengths:Array<number>, shots: Array<Shot> = []){
         let hitShots: Array<Shot> = [];
         for(var i=0; i<shots.length; i++){
+            this.squaresHit[shots[i].Position.row][shots[i].Position.col] = true;
             if(shots[i].WasHit){
                 hitShots.push(shots[i]);
             }
         }
+
+
         for(var i=0;i<num;i++){
             
             this.generateConfiguration(lengths, shots, hitShots);
@@ -65,13 +72,14 @@ export class ConfigurationGenerator{
         let currentCol:number = 0;
         for(var i=0;i <Globals.BOARD_ROWS; i++){
             for(var j = 0; j<Globals.BOARD_COLS; j++){
-                if(this.boardCounter[i][j]>currentMax && this.boardCounter[i][j] != this.lastNum){
+                if(this.boardCounter[i][j]>currentMax && !this.squaresHit[i][j]){
                     currentMax = this.boardCounter[i][j];
                     currentRow = i;
                     currentCol = j;
                 }
             }
         }
+        console.log(this.boardCounter);
         return new Position(currentRow, currentCol);
     }
 }
