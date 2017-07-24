@@ -11,8 +11,6 @@ export class ConfigurationGenerator{
     private nextPath: number[] = [];
     private exhaustive: boolean = false;
 
-    private shipsToAdd: Array<ShipPlacement> = [];
-
     public constructor(){
         this.boardCounter = [];
         this.squaresHit = [];
@@ -37,7 +35,7 @@ export class ConfigurationGenerator{
                 this.exhaustive = true;
                 this.nextPath = returnValue.nextPath;
             }else{
-                this.shipsToAdd.concat(returnValue.state.ships);
+                this.addShipsToGrid(returnValue.state.ships);
             }
         }else{
 
@@ -47,11 +45,23 @@ export class ConfigurationGenerator{
             returnValue = BoardState.tryGetRandomSet(lengths,shots,hitShots,this.nextPath,true);
             this.nextPath = returnValue.nextPath;
             if(returnValue.found){
-                this.shipsToAdd.concat(returnValue.state.ships);
+                console.log("here");
+                this.addShipsToGrid(returnValue.state.ships);
             }
         }
         
     }
+
+    public addShipsToGrid(ships: Array<ShipPlacement>){
+        for(var i=0; i<ships.length; i++){
+            
+            let squaresToAdd: Array<Position> = ships[i].getOccupiedPositions();
+            for(var j=0;j<squaresToAdd.length; j++){
+                this.boardCounter[squaresToAdd[j].row][squaresToAdd[j].col]++;
+            }
+        }
+    }
+
 
     public generateConfigurations(num:number, lengths:Array<number>, shots: Array<Shot> = []){
         let hitShots: Array<Shot> = [];
@@ -68,12 +78,9 @@ export class ConfigurationGenerator{
             this.generateConfiguration(lengths, shots, hitShots);
         }
 
-        for(var i=0; i<this.shipsToAdd.length; i++){
-            let squaresToAdd: Array<Position> = this.shipsToAdd[i].getOccupiedPositions();
-            for(var j=0;j<squaresToAdd.length; j++){
-                this.boardCounter[squaresToAdd[j].row][squaresToAdd[j].col]++;
-            }
-        }
+        console.log("sdf");
+
+       
     }
 
     public getMaxPosition():Position{
