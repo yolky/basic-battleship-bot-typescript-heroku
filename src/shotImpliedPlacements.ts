@@ -23,9 +23,11 @@ export class ShotImpliedPlacements{
                 this.validPlacementsByLength[key].push(listToCopy[i].deepClone());
             }
 
-            this.generateSingleValidPlacementsList();
+            
             //deep copy again
         }
+
+        this.generateSingleValidPlacementsList();
     }
 
     public static generateShotImpliedPlacements(length: number){
@@ -54,17 +56,19 @@ export class ShotImpliedPlacements{
     }
 
     public removeInvalidPositionsSingle(shipToCheck: ShipPossibilities, remakeList:boolean = true){
+        let stillValid: Array<ShipPlacement> = []
         for(var i=0; i<this.validPlacementsByLength[shipToCheck.length].length; i++){
             let currentPlacement: ShipPlacement = this.validPlacementsByLength[shipToCheck.length][i];
 
             let selectedPossibilitySet: {horizontal: boolean, vertical:boolean} = shipToCheck.possibilities[currentPlacement.position.row].row[currentPlacement.position.col];
             
             //if invalid
-            if(!((selectedPossibilitySet.horizontal && currentPlacement.orientation == Direction.Horizontal)
+            if(((selectedPossibilitySet.horizontal && currentPlacement.orientation == Direction.Horizontal)
             || (selectedPossibilitySet.vertical && currentPlacement.orientation == Direction.Vertical))){
-                this.validPlacementsByLength[shipToCheck.length].splice(i);
+                stillValid.push(this.validPlacementsByLength[shipToCheck.length][i]);
             }
         }
+        this.validPlacementsByLength[shipToCheck.length] = stillValid;
         if(remakeList){
             this.generateSingleValidPlacementsList();
         }

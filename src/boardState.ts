@@ -69,8 +69,6 @@ export class BoardState{
                 return {state: new BoardState([]), found:false};
             }
             
-            
-
             let occupiedPositions: Array<Position> = nextShip.getOccupiedPositions();
 
             possibleShips.push(nextShip);
