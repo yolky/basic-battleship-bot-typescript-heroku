@@ -50,7 +50,15 @@ export class BoardState{
         //perhaps get valid placements beforehand, and choose one with minimum number of valid placements
 
         while(numberUnresolved >0){
-            let nextShip:ShipPlacement = shotImpliedPlacementsList[0].pickRandomPlacement();
+            let firstUnresolved:ShotImpliedPlacements;
+            let index: number =0;
+            while(!firstUnresolved){
+                if(shotImpliedPlacementsList[index].resolved == false){
+                    firstUnresolved = shotImpliedPlacementsList[index];
+                }
+            }
+            let nextShip:ShipPlacement = firstUnresolved.pickRandomPlacement();
+
             let occupiedPositions: Array<Position> = nextShip.getOccupiedPositions();
             possibleShips.push(nextShip);
             numberRemaining[nextShip.length]--;
@@ -78,7 +86,7 @@ export class BoardState{
             if(numberRemaining[shipLengths[i]]>0){
                 let nextShip: ShipPlacement = validShipPositions[i].pickRandomPlacement();
                 for(var j=0; j<validShipPositions.length; j++){
-                    validShipPositions[i].removePossibilities(nextShip);
+                    validShipPositions[j].removePossibilities(nextShip);
                 }
                 possibleShips.push(nextShip);
                 numberRemaining[shipLengths[i]]--;
