@@ -102,6 +102,7 @@ export class ShipPlacer{
 
     public penalizePosition(position: Position, turn: number){
         for(var length in ShotImpliedPlacements.initialShotImpliedPlacements){
+            console.log(ShotImpliedPlacements.initialShotImpliedPlacements);
             let ShipPlacementsToPenalize: Array<ShipPlacement> = ShotImpliedPlacements.initialShotImpliedPlacements[length][position.row][position.col];
             for(var i=0; i< ShipPlacementsToPenalize.length; i++){
                 if(ShipPlacementsToPenalize[i].orientation == Direction.Horizontal){

@@ -29,9 +29,13 @@ export class MyBot {
         generator.generateConfigurations(300,[5,4,3,3,2], shotList);
         console.log(JSON.stringify(gamestate));
 
-        let opponentShots = gamestate.OpponentsShots;
+        let opponentShots: Array<Shot> = gamestate.OpponentsShots.map((x)=> {
+            return {Position: Position.letterFormatToPosition(x.Position.Row, x.Position.Column), WasHit: false};
+        });
+        console.log(opponentShots[opponentShots.length-1]);
 
-        MyBot.shipPlacer.penalizePosition(opponentShots[opponentShots.length-1], opponentShots.length);
+        console.log()
+        MyBot.shipPlacer.penalizePosition(opponentShots[opponentShots.length-1].Position, opponentShots.length);
 
         return generator.getMaxPosition();
 

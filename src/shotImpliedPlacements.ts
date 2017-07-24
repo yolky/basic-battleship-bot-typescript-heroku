@@ -46,6 +46,7 @@ export class ShotImpliedPlacements{
                 }
             }
         }
+        
     }
 
     public removeInvalidPositions(shipsToCheck: Array<ShipPossibilities>){
