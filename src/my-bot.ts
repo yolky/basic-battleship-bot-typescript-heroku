@@ -7,7 +7,8 @@ import {ShipPlacer} from './shipPlacer';
 
 export class MyBot {
     static letters:string = 'ABCDEFGHIJ';
-    
+    static shipPlacer = new ShipPlacer([5,4,3,3,2]);
+
     public getShipPositions() {
         // return [
         //     { StartingSquare: { Row: "A", Column: 1 }, EndingSquare : { Row: "A", Column: 5 } },
@@ -17,8 +18,7 @@ export class MyBot {
         //     { StartingSquare: { Row: "I", Column: 1 }, EndingSquare : { Row: "I", Column: 2 } },
         // ]
         //return BoardState.getRandomStartingConfiguration([5,4,3,3,2]);
-        let shipPlacer = new ShipPlacer([5,4,3,3,2]);
-        return shipPlacer.chooseConfiguration();
+        return MyBot.shipPlacer.chooseConfiguration();
     }
 
     public selectTarget(gamestate) {
@@ -28,7 +28,14 @@ export class MyBot {
         });
         generator.generateConfigurations(300,[5,4,3,3,2], shotList);
         console.log(JSON.stringify(gamestate));
+
+        let opponentShots = gamestate.OpponentsShots;
+
+        MyBot.shipPlacer.penalizePosition(opponentShots[opponentShots.length-1], opponentShots.length);
+
         return generator.getMaxPosition();
+
+        
         //return this.getRandomTarget(gamestate);
         // var previousShot = gamestate.MyShots && gamestate.MyShots[gamestate.MyShots.length-1];
         // if(previousShot) {
