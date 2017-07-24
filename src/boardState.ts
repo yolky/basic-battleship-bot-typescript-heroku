@@ -115,7 +115,6 @@ export class BoardState{
         let returnValue: {state: BoardState, found: boolean};
         do{
             returnValue = BoardState.tryGetRandomSet(shipLengths, shots, hitShots);
-
         }while(!returnValue.found)
         return returnValue.state;
     }
@@ -159,8 +158,8 @@ export class BoardState{
         return board;
     }
 
-    public static getRandomBoardArray(lengths: Array<number>, shots: Array<Shot>):Array<Array<boolean>>{
-        return BoardState.getRandomSet(lengths,shots).getBoardArray();
+    public static getRandomBoardArray(lengths: Array<number>, shots: Array<Shot>,hitShots: Array<Shot>):Array<Array<boolean>>{
+        return BoardState.getRandomSet(lengths,shots,hitShots).getBoardArray();
     }
 
     public static getRandomStartingConfiguration(lengths: Array<number>):Array<ShipPlacement>{

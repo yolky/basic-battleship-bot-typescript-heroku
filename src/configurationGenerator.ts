@@ -21,18 +21,19 @@ export class ConfigurationGenerator{
     public generateConfiguration(lengths:Array<number>, shots: Array<Shot> = [], hitShots:Array<Shot> = []):void{
         let compatible: boolean = false;
         let boardToAdd: Array<Array<boolean>>;
-        while(!compatible){
-            boardToAdd = BoardState.getRandomBoardArray(lengths, shots);
-            compatible = true;
-            for(var i =0; i<hitShots.length; i++){
-                //console.log(lengths);
-                //console.log(hitShots[i].Position.row + ','+hitShots[i].Position.col);
-                if(!boardToAdd[hitShots[i].Position.row][hitShots[i].Position.col]){
-                    compatible = false;
-                    break;
-                }
-            }
-        }
+        // while(!compatible){
+        //     boardToAdd = BoardState.getRandomBoardArray(lengths, shots);
+        //     compatible = true;
+        //     for(var i =0; i<hitShots.length; i++){
+        //         //console.log(lengths);
+        //         //console.log(hitShots[i].Position.row + ','+hitShots[i].Position.col);
+        //         if(!boardToAdd[hitShots[i].Position.row][hitShots[i].Position.col]){
+        //             compatible = false;
+        //             break;
+        //         }
+        //     }
+        //}
+        boardToAdd = BoardState.getRandomBoardArray(lengths,shots,hitShots);
         
         for(var i=0;i <Globals.BOARD_ROWS; i++){
             for(var j = 0; j<Globals.BOARD_COLS; j++){
