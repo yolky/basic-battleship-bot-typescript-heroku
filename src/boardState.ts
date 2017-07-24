@@ -26,10 +26,6 @@ export class BoardState{
 
         let currentPathIndex = 0; //how many guesses deep it is
         let currentPath: Array<number> = []; //the path of guesses it is currently following
-        
-        if(exhaustive){
-            console.log(pathToFollow);
-        }
 
         for(var i=0; i<shipLengths.length; i++){
             validShipPositions.push(new ShipPossibilities(shipLengths[i]));
