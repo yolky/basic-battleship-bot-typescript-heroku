@@ -2,14 +2,16 @@ import * as Globals from './constants'
 import {Shot} from './shot'
 import {BoardState} from './boardState'
 import {Position} from './position'
+import {ShipPlacement} from './shipPlacement'
 
 export class ConfigurationGenerator{
     public boardCounter: Array<Array<number>>;
     public squaresHit: Array<Array<boolean>>;
 
-    public lastNum:number=0;
     private nextPath: number[] = [];
     private exhaustive: boolean = false;
+
+    private shipsToAdd: Array<ShipPlacement> = [];
 
     public constructor(){
         this.boardCounter = [];
@@ -35,7 +37,7 @@ export class ConfigurationGenerator{
                 this.exhaustive = true;
                 this.nextPath = returnValue.nextPath;
             }else{
-                boardToAdd = returnValue.state.getBoardArray();
+                this.shipsToAdd.concat(returnValue.state.ships);
             }
         }else{
 
@@ -44,21 +46,11 @@ export class ConfigurationGenerator{
             let returnValue: {state:BoardState, found:boolean, nextPath: number[]};
             returnValue = BoardState.tryGetRandomSet(lengths,shots,hitShots,this.nextPath,true);
             this.nextPath = returnValue.nextPath;
-            boardToAdd = returnValue.state.getBoardArray();
+            if(returnValue.found){
+                this.shipsToAdd.concat(returnValue.state.ships);
+            }
         }
         
-
-        
-
-        if(boardToAdd)
-        
-        for(var i=0;i <Globals.BOARD_ROWS; i++){
-            for(var j = 0; j<Globals.BOARD_COLS; j++){
-                if(boardToAdd[i][j]){
-                    this.boardCounter[i][j]++;
-                }
-            }
-        }      
     }
 
     public generateConfigurations(num:number, lengths:Array<number>, shots: Array<Shot> = []){
@@ -75,7 +67,13 @@ export class ConfigurationGenerator{
             
             this.generateConfiguration(lengths, shots, hitShots);
         }
-        this.lastNum = num;
+
+        for(var i=0; i<this.shipsToAdd.length; i++){
+            let squaresToAdd: Array<Position> = this.shipsToAdd[i].getOccupiedPositions();
+            for(var j=0;j<squaresToAdd.length; j++){
+                this.boardCounter[squaresToAdd[j].row][squaresToAdd[j].col]++;
+            }
+        }
     }
 
     public getMaxPosition():Position{

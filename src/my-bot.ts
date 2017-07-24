@@ -23,7 +23,7 @@ export class MyBot {
         let shotList: Array<Shot> = gamestate.MyShots.map((x)=> {
             return {Position: Position.letterFormatToPosition(x.Position.Row, x.Position.Column), WasHit: x.WasHit};
         });
-        generator.generateConfigurations(100,[5,4,3,3,2], shotList);
+        generator.generateConfigurations(300,[5,4,3,3,2], shotList);
         console.log(JSON.stringify(gamestate));
         return generator.getMaxPosition();
         //return this.getRandomTarget(gamestate);
